@@ -6,8 +6,17 @@ interface Props {}
 
 const Home: FC<Props> = (): JSX.Element => {
   return (
-    // Capture Button
     <View style={styles.container}>
+      {/* App Titles */}
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>Choose your image</Text>
+        <Text style={styles.secondaryText}>
+          Please choose your image using one of these options, which you want to
+          convert to passport size
+        </Text>
+      </View>
+
+      {/* // Capture Button */}
       <View style={styles.btnContainer}>
         <TouchableOpacity style={styles.button}>
           <Icon name="camera" style={styles.icon} />
@@ -30,6 +39,26 @@ export default Home;
 
 const styles = StyleSheet.create({
   container: {flex: 1, justifyContent: 'center', alignItems: 'center'},
+  titleContainer: {
+    position: 'absolute',
+    top: 10,
+    left: 0,
+    right: 0,
+    paddingTop: 10,
+  },
+  title: {
+    fontSize: 25,
+    color: '#272727',
+    fontWeight: '500',
+    textAlign: 'center',
+  },
+  secondaryText: {
+    color: '#272727',
+    textAlign: 'center',
+    opacity: 0.5,
+    lineHeight: 20,
+    paddingTop: 5,
+  },
   btnContainer: {
     width: 120,
     height: 120,
