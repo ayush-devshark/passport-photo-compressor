@@ -2,13 +2,24 @@ import React, {FC} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import LargeIconButton from '../components/LargeIconButton';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {selectAndCropImageFromCamera} from '../utils/imageSelector';
+import {
+  selectAndCropImageFromCamera,
+  selectAndCropImageFromDevice,
+} from '../utils/imageSelector';
 
 interface Props {}
 
 const Home: FC<Props> = (): JSX.Element => {
   const handleImageCapture = async (): Promise<void> => {
     const {path, error} = await selectAndCropImageFromCamera();
+    if (error) {
+      return console.log(error);
+    }
+    console.log(path);
+  };
+
+  const handleImageSelection = async (): Promise<void> => {
+    const {path, error} = await selectAndCropImageFromDevice();
     if (error) {
       return console.log(error);
     }
@@ -32,7 +43,7 @@ const Home: FC<Props> = (): JSX.Element => {
       </LargeIconButton>
 
       {/* Select Button */}
-      <LargeIconButton title="Select">
+      <LargeIconButton title="Select" onPress={handleImageSelection}>
         <Icon name="folder-open" />
       </LargeIconButton>
     </View>

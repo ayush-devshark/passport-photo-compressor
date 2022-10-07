@@ -50,3 +50,22 @@ export const selectAndCropImageFromCamera = async (
     return {path: '', error: err};
   }
 };
+
+export const selectAndCropImageFromDevice = async (
+  width: number = 413,
+  height: number = 531,
+): Promise<{path: string; error: unknown | null}> => {
+  try {
+    await requestCameraPermissions();
+
+    // open the gallery
+    const {path} = await ImageCropPicker.openPicker({
+      width,
+      height,
+      cropping: true,
+    });
+    return {path, error: null};
+  } catch (err) {
+    return {path: '', error: err};
+  }
+};
