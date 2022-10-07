@@ -1,4 +1,5 @@
 import {Alert, PermissionsAndroid} from 'react-native';
+import ImageCropPicker from 'react-native-image-crop-picker';
 
 export const requestCameraPermissions = async (): Promise<void> => {
   try {
@@ -28,5 +29,24 @@ export const requestCameraPermissions = async (): Promise<void> => {
     }
   } catch (err) {
     console.log('Fail to open camera error!', err);
+  }
+};
+
+export const selectAndCropImageFromCamera = async (
+  width: number = 413,
+  height: number = 531,
+): Promise<{path: string; error: unknown | null}> => {
+  try {
+    await requestCameraPermissions();
+
+    // open the camera
+    const {path} = await ImageCropPicker.openCamera({
+      width,
+      height,
+      cropping: true,
+    });
+    return {path, error: null};
+  } catch (err) {
+    return {path: '', error: err};
   }
 };

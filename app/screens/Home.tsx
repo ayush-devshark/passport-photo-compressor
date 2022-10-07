@@ -1,25 +1,18 @@
 import React, {FC} from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import LargeIconButton from '../components/LargeIconButton';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {requestCameraPermissions} from '../utils/helper';
-import ImageCropPicker from 'react-native-image-crop-picker';
+import {selectAndCropImageFromCamera} from '../utils/imageSelector';
 
 interface Props {}
 
 const Home: FC<Props> = (): JSX.Element => {
   const handleImageCapture = async (): Promise<void> => {
-    try {
-      await requestCameraPermissions();
-
-      // open the camera
-      const {path} = await ImageCropPicker.openCamera({
-        width: 413,
-        height: 531,
-        cropping: true,
-      });
-      console.log(path);
-    } catch (err) {}
+    const {path, error} = await selectAndCropImageFromCamera();
+    if (error) {
+      return console.log(error);
+    }
+    console.log(path);
   };
 
   return (
