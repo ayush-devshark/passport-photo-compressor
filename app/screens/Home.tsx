@@ -6,16 +6,24 @@ import {
   selectAndCropImageFromCamera,
   selectAndCropImageFromDevice,
 } from '../utils/imageSelector';
+import {NavigationProp} from '@react-navigation/native';
+import {RootStackParamList} from '../navigation/AppNavigator';
 
-interface Props {}
+interface Props {
+  navigation: NavigationProp<RootStackParamList>;
+}
 
-const Home: FC<Props> = (): JSX.Element => {
+const Home: FC<Props> = ({navigation}): JSX.Element => {
+  const navigateToImageEditor = (uri: string): void => {
+    navigation.navigate('ImageEditor', {imageUri: uri});
+  };
+
   const handleImageCapture = async (): Promise<void> => {
     const {path, error} = await selectAndCropImageFromCamera();
     if (error) {
       return console.log(error);
     }
-    console.log(path);
+    navigateToImageEditor(path);
   };
 
   const handleImageSelection = async (): Promise<void> => {
@@ -23,7 +31,7 @@ const Home: FC<Props> = (): JSX.Element => {
     if (error) {
       return console.log(error);
     }
-    console.log(path);
+    navigateToImageEditor(path);
   };
 
   return (

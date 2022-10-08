@@ -8,7 +8,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Home from '../screens/Home';
 import ImageEditor from '../screens/ImageEditor';
 
-type RootStackParamList = {
+export type RootStackParamList = {
   Home: undefined;
   ImageEditor: {imageUri: string};
 };
