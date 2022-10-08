@@ -1,8 +1,9 @@
 import React from 'react';
-import Home from './app/screens/Home';
+import 'react-native-gesture-handler';
+import AppNavigator from './app/navigation/AppNavigator';
 
 const App = () => {
-  return <Home />;
+  return <AppNavigator />;
 };
 
 export default App;
