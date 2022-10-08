@@ -1,5 +1,9 @@
 import React, {FC} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  Theme,
+  DefaultTheme,
+} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Home from '../screens/Home';
 import ImageEditor from '../screens/ImageEditor';
@@ -11,12 +15,17 @@ type RootStackParamList = {
 
 const Stack = createStackNavigator<RootStackParamList>();
 
+const CUSTOM_THEME: Theme = {
+  ...DefaultTheme,
+  colors: {...DefaultTheme.colors, background: '#fff'},
+};
+
 interface Props {}
 
 const AppNavigator: FC<Props> = (): JSX.Element => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
+    <NavigationContainer theme={CUSTOM_THEME}>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="ImageEditor" component={ImageEditor} />
       </Stack.Navigator>
