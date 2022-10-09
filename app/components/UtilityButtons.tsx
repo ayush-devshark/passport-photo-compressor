@@ -2,20 +2,24 @@ import React, {FC} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-interface Props {}
+interface Props {
+  onPress?: () => void;
+}
 
-const Back: FC<Props> = (): JSX.Element => {
+type buttonProps = FC<Props>;
+
+const Back: buttonProps = ({onPress}): JSX.Element => {
   return (
-    <Pressable style={styles.button}>
+    <Pressable style={styles.button} onPress={onPress}>
       <Icon name="arrow-left" style={styles.icon} />
     </Pressable>
   );
 };
 
-const Save: FC<Props> = (): JSX.Element => {
+const Save: buttonProps = ({onPress}): JSX.Element => {
   return (
     <View>
-      <Pressable style={styles.button}>
+      <Pressable style={styles.button} onPress={onPress}>
         <Icon name="file-download" style={styles.icon} />
       </Pressable>
       <Text>Save</Text>
@@ -23,7 +27,7 @@ const Save: FC<Props> = (): JSX.Element => {
   );
 };
 
-const UtilityButtons: {Back: FC; Save: FC} = {
+const UtilityButtons: {Back: buttonProps; Save: buttonProps} = {
   Back,
   Save,
 };
