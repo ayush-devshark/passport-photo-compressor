@@ -1,6 +1,7 @@
 import {StackScreenProps} from '@react-navigation/stack';
 import React, {FC} from 'react';
 import {StyleSheet, View} from 'react-native';
+import BackgroundImageEditor from '../components/BackgroundImageEditor';
 import ImageEditorHeader from '../components/ImageEditorHeader';
 import {RootStackParamList} from '../navigation/AppNavigator';
 
@@ -15,6 +16,7 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
   return (
     <View style={styles.container}>
       <ImageEditorHeader />
+      <BackgroundImageEditor />
     </View>
   );
 };
@@ -22,5 +24,8 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
 export default ImageEditor;
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    flex: 1,
+    padding: 15,
+  },
 });
