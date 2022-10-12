@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import SelectorButton from './SelectorButton';
 
 interface Props {}
 
@@ -8,15 +9,13 @@ const EditorTools: FC<Props> = (): JSX.Element => {
   return (
     <View style={styles.container}>
       <View style={styles.btnContainer}>
-        <Pressable style={styles.button}>
-          <Icon style={styles.btnIcon} name="folder-open" />
-          <Text style={styles.btnLabel}>Select Another</Text>
-        </Pressable>
+        <SelectorButton label="Select Another">
+          <Icon name="folder-open" />
+        </SelectorButton>
 
-        <Pressable style={styles.button}>
-          <Icon style={styles.btnIcon} name="camera" />
-          <Text style={styles.btnLabel}>Capture Another</Text>
-        </Pressable>
+        <SelectorButton label="Capture Anotherr">
+          <Icon name="camera" />
+        </SelectorButton>
       </View>
     </View>
   );
@@ -35,20 +34,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-  },
-  button: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#6C9ADE',
-    padding: 10,
-    borderRadius: 5,
-  },
-  btnIcon: {
-    color: '#fff',
-    fontSize: 16,
-    marginRight: 5,
-  },
-  btnLabel: {
-    color: '#fff',
   },
 });
