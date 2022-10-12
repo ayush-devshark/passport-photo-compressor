@@ -2,6 +2,7 @@ import {StackScreenProps} from '@react-navigation/stack';
 import React, {FC} from 'react';
 import {StyleSheet, View} from 'react-native';
 import BackgroundImageEditor from '../components/BackgroundImageEditor';
+import EditorTools from '../components/EditorTools';
 import ImageEditorHeader from '../components/ImageEditorHeader';
 import SelectedImage from '../components/SelectedImage';
 import {RootStackParamList} from '../navigation/AppNavigator';
@@ -18,9 +19,11 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
     <View style={styles.container}>
       <ImageEditorHeader />
       <BackgroundImageEditor />
+
       <View style={styles.imageContainer}>
         <SelectedImage uri={imageUri} />
       </View>
+      <EditorTools />
     </View>
   );
 };
