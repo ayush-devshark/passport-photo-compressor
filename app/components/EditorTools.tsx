@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import Slider from '@react-native-community/slider';
 import SelectorButton from './SelectorButton';
 
 interface Props {}
@@ -21,6 +22,17 @@ const EditorTools: FC<Props> = (): JSX.Element => {
       <View style={styles.infoContainer}>
         <Text style={styles.label}>Compressed to: 50%</Text>
         <Text style={styles.label}>Image size: 50KB</Text>
+      </View>
+
+      <View style={styles.sliderContainer}>
+        <Slider
+          // style={{width: 200, height: 40}}
+          // minimumValue={0}
+          // maximumValue={1}
+          maximumTrackTintColor="rgba(108, 154, 222, 0.8)"
+          minimumTrackTintColor="rgb(108, 154, 222)"
+          thumbTintColor="rgb(108, 154, 222)"
+        />
       </View>
     </View>
   );
@@ -49,5 +61,8 @@ const styles = StyleSheet.create({
   label: {
     color: '#272727',
     fontSize: 18,
+  },
+  sliderContainer: {
+    paddingVertical: 10,
   },
 });
