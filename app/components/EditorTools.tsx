@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import SelectorButton from './SelectorButton';
 
@@ -16,6 +16,11 @@ const EditorTools: FC<Props> = (): JSX.Element => {
         <SelectorButton label="Capture Anotherr">
           <Icon name="camera" />
         </SelectorButton>
+      </View>
+
+      <View style={styles.infoContainer}>
+        <Text style={styles.label}>Compressed to: 50%</Text>
+        <Text style={styles.label}>Image size: 50KB</Text>
       </View>
     </View>
   );
@@ -34,5 +39,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  infoContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 5,
+  },
+  label: {
+    color: '#272727',
+    fontSize: 18,
   },
 });
