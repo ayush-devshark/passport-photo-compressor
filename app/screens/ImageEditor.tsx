@@ -1,11 +1,15 @@
 import {StackScreenProps} from '@react-navigation/stack';
-import React, {FC} from 'react';
+import React, {FC, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import BackgroundImageEditor from '../components/BackgroundImageEditor';
 import EditorTools from '../components/EditorTools';
 import ImageEditorHeader from '../components/ImageEditorHeader';
 import SelectedImage from '../components/SelectedImage';
 import {RootStackParamList} from '../navigation/AppNavigator';
+import {
+  selectAndCropImageFromCamera,
+  selectAndCropImageFromDevice,
+} from '../utils/imageSelector';
 
 type RouteProps = StackScreenProps<RootStackParamList, 'ImageEditor'>;
 interface Props {
@@ -13,7 +17,24 @@ interface Props {
 }
 
 const ImageEditor: FC<Props> = ({route}): JSX.Element => {
+  const [selectedImage, setSelectedImage] = useState<string>('');
   const {imageUri} = route.params;
+
+  const selectImageToCompress = async (): Promise<void> => {
+    const {path, error} = await selectAndCropImageFromDevice();
+    if (error) {
+      return console.log(error);
+    }
+    setSelectedImage(path);
+  };
+
+  const captureImageToCompress = async (): Promise<void> => {
+    const {path, error} = await selectAndCropImageFromCamera();
+    if (error) {
+      return console.log(error);
+    }
+    setSelectedImage(path);
+  };
 
   return (
     <View style={styles.container}>
@@ -21,9 +42,12 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
       <BackgroundImageEditor />
 
       <View style={styles.imageContainer}>
-        <SelectedImage uri={imageUri} />
+        <SelectedImage uri={selectedImage || imageUri} />
       </View>
-      <EditorTools />
+      <EditorTools
+        onSelectAnother={selectImageToCompress}
+        onCaptureAnother={captureImageToCompress}
+      />
     </View>
   );
 };

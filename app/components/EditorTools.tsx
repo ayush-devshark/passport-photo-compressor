@@ -4,17 +4,23 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import Slider from '@react-native-community/slider';
 import SelectorButton from './SelectorButton';
 
-interface Props {}
+interface Props {
+  onSelectAnother?: () => void;
+  onCaptureAnother?: () => void;
+}
 
-const EditorTools: FC<Props> = (): JSX.Element => {
+const EditorTools: FC<Props> = ({
+  onSelectAnother,
+  onCaptureAnother,
+}): JSX.Element => {
   return (
     <View style={styles.container}>
       <View style={styles.btnContainer}>
-        <SelectorButton label="Select Another">
+        <SelectorButton label="Select Another" onPress={onSelectAnother}>
           <Icon name="folder-open" />
         </SelectorButton>
 
-        <SelectorButton label="Capture Anotherr">
+        <SelectorButton label="Capture Anotherr" onPress={onCaptureAnother}>
           <Icon name="camera" />
         </SelectorButton>
       </View>
