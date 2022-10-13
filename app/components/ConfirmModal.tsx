@@ -1,17 +1,43 @@
 import React, {FC} from 'react';
-import {Modal, StyleSheet, Text, View} from 'react-native';
+import {Modal, Pressable, StyleSheet, Text, View} from 'react-native';
 
-interface Props {}
+interface Props {
+  visible?: boolean;
+  title: string;
+  message: string;
+  onCancelPress?: () => void;
+  onDiscardPress?: () => void;
+}
 
-const ConfirmModal: FC<Props> = (): JSX.Element => {
+const ConfirmModal: FC<Props> = ({
+  visible,
+  title,
+  message,
+  onCancelPress,
+  onDiscardPress,
+}): JSX.Element => {
   return (
-    <Modal transparent>
+    <Modal visible={visible} transparent>
       <View style={styles.container}>
         <View style={styles.modal}>
-          <Text style={styles.modalTitle}>Are you sure ?</Text>
-          <Text style={styles.message}>
-            Are you sure because this action will discard all your changes ?
-          </Text>
+          <View>
+            <Text style={styles.modalTitle}>{title}</Text>
+            <Text style={styles.message}>{message}</Text>
+          </View>
+
+          <View style={styles.btnContainer}>
+            <Pressable
+              style={[styles.commonBtnStyle, styles.cancel]}
+              onPress={onCancelPress}>
+              <Text>Cancel</Text>
+            </Pressable>
+
+            <Pressable
+              style={[styles.commonBtnStyle, styles.discard]}
+              onPress={onDiscardPress}>
+              <Text style={styles.discardText}>Discard</Text>
+            </Pressable>
+          </View>
         </View>
       </View>
     </Modal>
@@ -42,5 +68,28 @@ const styles = StyleSheet.create({
     color: '#272727',
     opacity: 0.8,
     lineHeight: 20,
+  },
+  btnContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 15,
+  },
+  commonBtnStyle: {
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 15,
+    borderRadius: 5,
+  },
+  cancel: {
+    borderWidth: 1.5,
+    borderColor: '#6C9ADE',
+  },
+  discard: {
+    backgroundColor: '#d34150',
+    marginLeft: 15,
+  },
+  discardText: {
+    color: '#ffffffe6',
   },
 });

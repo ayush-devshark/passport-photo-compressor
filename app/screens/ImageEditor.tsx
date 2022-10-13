@@ -19,6 +19,7 @@ interface Props {
 
 const ImageEditor: FC<Props> = ({route}): JSX.Element => {
   const [selectedImage, setSelectedImage] = useState<string>('');
+  const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
   const {imageUri} = route.params;
 
   const selectImageToCompress = async (): Promise<void> => {
@@ -51,7 +52,11 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
         onCaptureAnother={captureImageToCompress}
       />
 
-      <ConfirmModal />
+      <ConfirmModal
+        title="Are you sure ?"
+        visible={showConfirmModal}
+        message="Are you sure because this action will discard all your changes ?"
+      />
     </View>
   );
 };
