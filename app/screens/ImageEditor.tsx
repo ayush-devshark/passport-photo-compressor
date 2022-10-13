@@ -2,6 +2,7 @@ import {StackScreenProps} from '@react-navigation/stack';
 import React, {FC, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import BackgroundImageEditor from '../components/BackgroundImageEditor';
+import ConfirmModal from '../components/ConfirmModal';
 import EditorTools from '../components/EditorTools';
 import ImageEditorHeader from '../components/ImageEditorHeader';
 import SelectedImage from '../components/SelectedImage';
@@ -44,10 +45,13 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
       <View style={styles.imageContainer}>
         <SelectedImage uri={selectedImage || imageUri} />
       </View>
+
       <EditorTools
         onSelectAnother={selectImageToCompress}
         onCaptureAnother={captureImageToCompress}
       />
+
+      <ConfirmModal />
     </View>
   );
 };
