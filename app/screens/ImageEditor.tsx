@@ -1,5 +1,6 @@
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import BackgroundImageEditor from '../components/BackgroundImageEditor';
 import ConfirmModal from '../components/ConfirmModal';
@@ -18,9 +19,15 @@ interface Props {
 }
 
 const ImageEditor: FC<Props> = ({route}): JSX.Element => {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
   const [selectedImage, setSelectedImage] = useState<string>('');
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
+  const backActionRef = useRef<any>();
   const {imageUri} = route.params;
+
+  const displayConfirmModal = (): void => setShowConfirmModal(true);
+  const hideConfirmModal = (): void => setShowConfirmModal(false);
 
   const selectImageToCompress = async (): Promise<void> => {
     const {path, error} = await selectAndCropImageFromDevice();
@@ -37,6 +44,22 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
     }
     setSelectedImage(path);
   };
+
+  // Handling back press manually
+  const handleMoveToBackScreen = (): void => {
+    navigation.removeListener('beforeRemove', () => {});
+    hideConfirmModal();
+    navigation.dispatch(backActionRef.current);
+  };
+
+  // Handling the back press
+  useEffect(() => {
+    navigation.addListener('beforeRemove', e => {
+      e.preventDefault();
+      displayConfirmModal();
+      backActionRef.current = e.data.action;
+    });
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
@@ -56,6 +79,8 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
         title="Are you sure ?"
         visible={showConfirmModal}
         message="Are you sure because this action will discard all your changes ?"
+        onCancelPress={hideConfirmModal}
+        onDiscardPress={handleMoveToBackScreen}
       />
     </View>
   );
