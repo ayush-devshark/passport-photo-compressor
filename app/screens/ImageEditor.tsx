@@ -1,12 +1,13 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
-import React, {FC, useEffect, useRef, useState} from 'react';
+import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import BackgroundImageEditor from '../components/BackgroundImageEditor';
 import ConfirmModal from '../components/ConfirmModal';
 import EditorTools from '../components/EditorTools';
 import ImageEditorHeader from '../components/ImageEditorHeader';
 import SelectedImage from '../components/SelectedImage';
+import fsModule from '../modules/fsModule';
 import {RootStackParamList} from '../navigation/AppNavigator';
 import {
   selectAndCropImageFromCamera,
@@ -52,6 +53,16 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
     navigation.dispatch(backActionRef.current);
   };
 
+  const getImageSize = useCallback(async (): Promise<void> => {
+    try {
+      const uri = imageUri.split('file:///')[1];
+      const size = await fsModule.getSize(uri);
+      console.log(size);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [imageUri]);
+
   // Handling the back press
   useEffect(() => {
     navigation.addListener('beforeRemove', e => {
@@ -59,7 +70,8 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
       displayConfirmModal();
       backActionRef.current = e.data.action;
     });
-  }, [navigation]);
+    getImageSize();
+  }, [navigation, getImageSize]);
 
   return (
     <View style={styles.container}>
