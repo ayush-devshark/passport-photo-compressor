@@ -9,6 +9,7 @@ import ImageEditorHeader from '../components/ImageEditorHeader';
 import SelectedImage from '../components/SelectedImage';
 import fsModule from '../modules/fsModule';
 import {RootStackParamList} from '../navigation/AppNavigator';
+import {covertSizeInKb} from '../utils/helper';
 import {
   selectAndCropImageFromCamera,
   selectAndCropImageFromDevice,
@@ -24,6 +25,8 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
 
   const [selectedImage, setSelectedImage] = useState<string>('');
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
+  const [fileSize, setFileSize] = useState<number>(0);
+
   const backActionRef = useRef<any>();
   const {imageUri} = route.params;
 
@@ -57,7 +60,8 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
     try {
       const uri = imageUri.split('file:///')[1];
       const size = await fsModule.getSize(uri);
-      console.log(size);
+      const calculatedSize = covertSizeInKb(size);
+      setFileSize(calculatedSize);
     } catch (err) {
       console.log(err);
     }
@@ -85,6 +89,7 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
       <EditorTools
         onSelectAnother={selectImageToCompress}
         onCaptureAnother={captureImageToCompress}
+        fileSize={fileSize}
       />
 
       <ConfirmModal

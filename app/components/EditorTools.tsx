@@ -5,11 +5,13 @@ import Slider from '@react-native-community/slider';
 import SelectorButton from './SelectorButton';
 
 interface Props {
+  fileSize?: number;
   onSelectAnother?: () => void;
   onCaptureAnother?: () => void;
 }
 
 const EditorTools: FC<Props> = ({
+  fileSize,
   onSelectAnother,
   onCaptureAnother,
 }): JSX.Element => {
@@ -27,7 +29,7 @@ const EditorTools: FC<Props> = ({
 
       <View style={styles.infoContainer}>
         <Text style={styles.label}>Compressed to: 50%</Text>
-        <Text style={styles.label}>Image size: 50KB</Text>
+        <Text style={styles.label}>Image size: {fileSize} kb</Text>
       </View>
 
       <View style={styles.sliderContainer}>
