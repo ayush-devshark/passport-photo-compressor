@@ -8,6 +8,7 @@ import {
 } from '../utils/imageSelector';
 import {NavigationProp} from '@react-navigation/native';
 import {RootStackParamList} from '../navigation/AppNavigator';
+import fsModules from '../modules/fsModule';
 
 interface Props {
   navigation: NavigationProp<RootStackParamList>;
@@ -34,11 +35,22 @@ const Home: FC<Props> = ({navigation}): JSX.Element => {
     navigateToImageEditor(path);
   };
 
+  const handleOnPress = async (): Promise<void> => {
+    try {
+      const message = await fsModules?.justGreetMe('JOHN');
+      console.log(message);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <View style={styles.container}>
       {/* App Titles */}
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>Choose your image</Text>
+        <Text onPress={handleOnPress} style={styles.title}>
+          Choose your image
+        </Text>
         <Text style={styles.secondaryText}>
           Please choose your image using one of these options, which you want to
           convert to passport size
