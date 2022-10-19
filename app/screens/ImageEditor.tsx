@@ -67,6 +67,15 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
     }
   }, [imageUri]);
 
+  // compressing image
+
+  const handleImageCompress = async (value: number): Promise<void> => {
+    const compressValue: number = Math.floor(value * 100);
+    const uri = imageUri.split('file:///')[1];
+    const res = await fsModule.compressImage(uri, compressValue);
+    console.log(res);
+  };
+
   // Handling the back press
   useEffect(() => {
     navigation.addListener('beforeRemove', e => {
@@ -87,9 +96,10 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
       </View>
 
       <EditorTools
+        fileSize={fileSize}
         onSelectAnother={selectImageToCompress}
         onCaptureAnother={captureImageToCompress}
-        fileSize={fileSize}
+        onSliderChange={handleImageCompress}
       />
 
       <ConfirmModal

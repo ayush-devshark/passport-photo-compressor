@@ -8,12 +8,14 @@ interface Props {
   fileSize?: number;
   onSelectAnother?: () => void;
   onCaptureAnother?: () => void;
+  onSliderChange?: (value: number) => void;
 }
 
 const EditorTools: FC<Props> = ({
   fileSize,
   onSelectAnother,
   onCaptureAnother,
+  onSliderChange,
 }): JSX.Element => {
   return (
     <View style={styles.container}>
@@ -34,12 +36,10 @@ const EditorTools: FC<Props> = ({
 
       <View style={styles.sliderContainer}>
         <Slider
-          // style={{width: 200, height: 40}}
-          // minimumValue={0}
-          // maximumValue={1}
           maximumTrackTintColor="rgba(108, 154, 222, 0.8)"
           minimumTrackTintColor="rgb(108, 154, 222)"
           thumbTintColor="rgb(108, 154, 222)"
+          onValueChange={onSliderChange}
         />
       </View>
     </View>
