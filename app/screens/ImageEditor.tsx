@@ -27,6 +27,7 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
   const [fileSize, setFileSize] = useState<number>(0);
   const [compressValue, setCompressValue] = useState<number>(1);
+  const [compressedPercentage, setCompressedPercentage] = useState<number>(100);
 
   const backActionRef = useRef<any>();
   const {imageUri} = route.params;
@@ -74,7 +75,10 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
     const calcCompressValue: number = Math.floor(value * 100);
     const uri = imageUri.split('file:///')[1];
     const res = await fsModule.compressImage(uri, calcCompressValue);
-    console.log(res);
+    setCompressedPercentage(Math.round(value * 100));
+  };
+
+  const updateCompressValue = (value: number): void => {
     setCompressValue(value);
   };
 
@@ -100,9 +104,11 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
       <EditorTools
         fileSize={fileSize}
         compressValue={compressValue}
+        compressedPercentage={compressedPercentage}
         onSelectAnother={selectImageToCompress}
         onCaptureAnother={captureImageToCompress}
         onSliderChange={handleImageCompress}
+        onSlidingComplete={updateCompressValue}
       />
 
       <ConfirmModal

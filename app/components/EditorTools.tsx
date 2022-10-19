@@ -7,9 +7,11 @@ import SelectorButton from './SelectorButton';
 interface Props {
   fileSize?: number;
   compressValue?: number;
+  compressedPercentage?: number;
   onSelectAnother?: () => void;
   onCaptureAnother?: () => void;
   onSliderChange?: (value: number) => void;
+  onSlidingComplete?: (value: number) => void;
 }
 
 const EditorTools: FC<Props> = ({
@@ -17,6 +19,8 @@ const EditorTools: FC<Props> = ({
   onSelectAnother,
   compressValue,
   onCaptureAnother,
+  compressedPercentage,
+  onSlidingComplete,
   onSliderChange,
 }): JSX.Element => {
   return (
@@ -32,7 +36,7 @@ const EditorTools: FC<Props> = ({
       </View>
 
       <View style={styles.infoContainer}>
-        <Text style={styles.label}>Compressed to: 50%</Text>
+        <Text style={styles.label}>Compressed to: {compressedPercentage}%</Text>
         <Text style={styles.label}>Image size: {fileSize} kb</Text>
       </View>
 
@@ -45,6 +49,7 @@ const EditorTools: FC<Props> = ({
           minimumTrackTintColor="rgb(108, 154, 222)"
           thumbTintColor="rgb(108, 154, 222)"
           onValueChange={onSliderChange}
+          onSlidingComplete={onSlidingComplete}
         />
       </View>
     </View>
