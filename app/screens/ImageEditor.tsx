@@ -75,6 +75,8 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
     const calcCompressValue: number = Math.floor(value * 100);
     const uri = imageUri.split('file:///')[1];
     const res = await fsModule.compressImage(uri, calcCompressValue);
+    const calculatedSize = covertSizeInKb(res.size);
+    setFileSize(calculatedSize);
     setCompressedPercentage(Math.round(value * 100));
   };
 
