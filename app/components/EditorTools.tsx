@@ -6,6 +6,7 @@ import SelectorButton from './SelectorButton';
 
 interface Props {
   fileSize?: number;
+  compressValue?: number;
   onSelectAnother?: () => void;
   onCaptureAnother?: () => void;
   onSliderChange?: (value: number) => void;
@@ -14,6 +15,7 @@ interface Props {
 const EditorTools: FC<Props> = ({
   fileSize,
   onSelectAnother,
+  compressValue,
   onCaptureAnother,
   onSliderChange,
 }): JSX.Element => {
@@ -36,6 +38,9 @@ const EditorTools: FC<Props> = ({
 
       <View style={styles.sliderContainer}>
         <Slider
+          minimumValue={0.1}
+          maximumValue={1}
+          value={compressValue}
           maximumTrackTintColor="rgba(108, 154, 222, 0.8)"
           minimumTrackTintColor="rgb(108, 154, 222)"
           thumbTintColor="rgb(108, 154, 222)"

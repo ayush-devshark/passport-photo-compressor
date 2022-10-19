@@ -26,6 +26,7 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
   const [selectedImage, setSelectedImage] = useState<string>('');
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
   const [fileSize, setFileSize] = useState<number>(0);
+  const [compressValue, setCompressValue] = useState<number>(1);
 
   const backActionRef = useRef<any>();
   const {imageUri} = route.params;
@@ -70,10 +71,11 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
   // compressing image
 
   const handleImageCompress = async (value: number): Promise<void> => {
-    const compressValue: number = Math.floor(value * 100);
+    const calcCompressValue: number = Math.floor(value * 100);
     const uri = imageUri.split('file:///')[1];
-    const res = await fsModule.compressImage(uri, compressValue);
+    const res = await fsModule.compressImage(uri, calcCompressValue);
     console.log(res);
+    setCompressValue(value);
   };
 
   // Handling the back press
@@ -97,6 +99,7 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
 
       <EditorTools
         fileSize={fileSize}
+        compressValue={compressValue}
         onSelectAnother={selectImageToCompress}
         onCaptureAnother={captureImageToCompress}
         onSliderChange={handleImageCompress}
