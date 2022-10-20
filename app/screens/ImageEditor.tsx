@@ -24,6 +24,7 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const [selectedImage, setSelectedImage] = useState<string>('');
+  const [compressedImage, setCompressedImage] = useState<string>('');
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
   const [fileSize, setFileSize] = useState<number>(0);
   const [compressValue, setCompressValue] = useState<number>(1);
@@ -31,6 +32,12 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
 
   const backActionRef = useRef<any>();
   const {imageUri} = route.params;
+
+  const resetActivity = (): void => {
+    setCompressValue(1);
+    setCompressedPercentage(100);
+    setCompressedImage('');
+  };
 
   const displayConfirmModal = (): void => setShowConfirmModal(true);
   const hideConfirmModal = (): void => setShowConfirmModal(false);
@@ -40,6 +47,8 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
     if (error) {
       return console.log(error);
     }
+    resetActivity();
+    getImageSize(path);
     setSelectedImage(path);
   };
 
@@ -48,6 +57,8 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
     if (error) {
       return console.log(error);
     }
+    resetActivity();
+    getImageSize(path);
     setSelectedImage(path);
   };
 
@@ -58,29 +69,28 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
     navigation.dispatch(backActionRef.current);
   };
 
-  const getImageSize = useCallback(async (): Promise<void> => {
+  const getImageSize = useCallback(async (imgUri: string): Promise<void> => {
     try {
-      const uri = imageUri.split('file:///')[1];
+      const uri = imgUri.split('file:///')[1];
       const size = await fsModule.getSize(uri);
       const calculatedSize = covertSizeInKb(size);
       setFileSize(calculatedSize);
     } catch (err) {
       console.log(err);
     }
-  }, [imageUri]);
+  }, []);
 
   // compressing image
-
   const handleImageCompress = async (value: number): Promise<void> => {
     // converting to 10 to 100 value
     const calcCompressValue: number = Math.floor(value * 100);
 
     // getting size and location of compressed file from java fsModule
-    const uri = imageUri.split('file:///')[1];
+    const uri = selectedImage.split('file:///')[1];
     const res = await fsModule.compressImage(uri, calcCompressValue);
 
     // setting image file location for rendering
-    setSelectedImage('file:///' + res.uri);
+    setCompressedImage('file:///' + res.uri);
 
     // setting file size in kb
     const calculatedSize = covertSizeInKb(res.size);
@@ -100,8 +110,14 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
       displayConfirmModal();
       backActionRef.current = e.data.action;
     });
-    getImageSize();
-  }, [navigation, getImageSize]);
+  }, [navigation]);
+
+  useEffect(() => {
+    if (imageUri && !selectedImage) {
+      setSelectedImage(imageUri);
+      getImageSize(imageUri);
+    }
+  }, [imageUri, getImageSize, selectedImage]);
 
   return (
     <View style={styles.container}>
@@ -109,7 +125,7 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
       <BackgroundImageEditor />
 
       <View style={styles.imageContainer}>
-        <SelectedImage uri={selectedImage || imageUri} />
+        <SelectedImage uri={compressedImage || selectedImage} />
       </View>
 
       <EditorTools
