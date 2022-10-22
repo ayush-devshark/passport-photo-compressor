@@ -3,15 +3,16 @@ import {Image, StyleSheet, View} from 'react-native';
 
 interface Props {
   uri: string;
+  children?: React.ReactNode;
 }
 
-const SelectedImage: FC<Props> = ({uri}): JSX.Element | null => {
+const SelectedImage: FC<Props> = ({uri, children}): JSX.Element | null => {
   if (!uri) {
     return null;
   }
   return (
     <View style={styles.container}>
-      <Image source={{uri}} style={styles.image} />
+      {children || <Image source={{uri}} style={styles.image} />}
     </View>
   );
 };
@@ -25,6 +26,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     elevation: 15,
     padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   image: {
     width: '100%',
