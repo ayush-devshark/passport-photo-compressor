@@ -4,6 +4,7 @@ import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import BackgroundImageEditor from '../components/BackgroundImageEditor';
 import ConfirmModal from '../components/ConfirmModal';
+import DoneLottie from '../components/DoneLottie';
 import EditorTools from '../components/EditorTools';
 import ImageEditorHeader from '../components/ImageEditorHeader';
 import LoadingAnimation from '../components/LoadingAnimation';
@@ -28,6 +29,7 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
   const [compressedImage, setCompressedImage] = useState<string>('');
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
   const [loadingImage, setLoadingImage] = useState<boolean>(false);
+  const [isImageSaved, setIsImageSaved] = useState<boolean>(false);
   const [fileSize, setFileSize] = useState<number>(0);
   const [compressValue, setCompressValue] = useState<number>(1);
   const [compressedPercentage, setCompressedPercentage] = useState<number>(100);
@@ -115,7 +117,9 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
         name,
         calcCompressValue,
       );
-      console.log(res);
+      if (res === 'Done') {
+        setIsImageSaved(true);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -148,7 +152,16 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
 
       <View style={styles.imageContainer}>
         <SelectedImage uri={compressedImage || selectedImage}>
-          {loadingImage && <LoadingAnimation visible={loadingImage} />}
+          {loadingImage ||
+            (isImageSaved && (
+              <>
+                <LoadingAnimation visible={loadingImage} />
+                <DoneLottie
+                  visible={isImageSaved}
+                  onFinish={() => setIsImageSaved(false)}
+                />
+              </>
+            ))}
         </SelectedImage>
       </View>
 
