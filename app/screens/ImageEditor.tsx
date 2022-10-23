@@ -105,6 +105,22 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
     setCompressedPercentage(Math.round(value * 100));
   };
 
+  const handleImageSave = async (): Promise<void> => {
+    try {
+      const name = 'pp-' + Date.now();
+      const calcCompressValue: number = Math.floor(compressValue * 100);
+      const uri = compressedImage.split('file:///')[1];
+      const res = await fsModule.saveImageToDevice(
+        uri,
+        name,
+        calcCompressValue,
+      );
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const updateCompressValue = (value: number): void => {
     setCompressValue(value);
   };
@@ -127,7 +143,7 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
 
   return (
     <View style={styles.container}>
-      <ImageEditorHeader />
+      <ImageEditorHeader onSavePress={handleImageSave} />
       <BackgroundImageEditor />
 
       <View style={styles.imageContainer}>
