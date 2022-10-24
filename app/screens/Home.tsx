@@ -1,5 +1,5 @@
 import React, {FC, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Linking, StyleSheet, Text, View} from 'react-native';
 import LargeIconButton from '../components/LargeIconButton';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {
@@ -25,16 +25,17 @@ const Home: FC<Props> = ({navigation}): JSX.Element => {
 
   const handleImageCapture = async (): Promise<void> => {
     const {path, error} = await selectAndCropImageFromCamera();
-    let isGranted: boolean = false;
+
     if (error) {
-      isGranted = await checkCameraPermission();
+      const isGranted = await checkCameraPermission();
+      if (!isGranted) {
+        return setShowPermissionInfoAlert(true);
+      }
     }
 
-    if (!isGranted) {
-      return setShowPermissionInfoAlert(true);
+    if (path) {
+      navigateToImageEditor(path);
     }
-
-    navigateToImageEditor(path);
   };
 
   const handleImageSelection = async (): Promise<void> => {
@@ -43,6 +44,11 @@ const Home: FC<Props> = ({navigation}): JSX.Element => {
       return console.log(error);
     }
     navigateToImageEditor(path);
+  };
+
+  const handleOpenSettings = (): void => {
+    setShowPermissionInfoAlert(false);
+    Linking.openSettings();
   };
 
   //  Example native module access
@@ -83,6 +89,8 @@ const Home: FC<Props> = ({navigation}): JSX.Element => {
         dangerBtnTitle="Close"
         title="Required Camera Permission"
         message="For capturing image camera permission are required."
+        onDangerBtnPress={() => setShowPermissionInfoAlert(false)}
+        onPrimaryBtnPress={handleOpenSettings}
       />
     </View>
   );

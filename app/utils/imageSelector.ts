@@ -1,18 +1,16 @@
-import {Alert, PermissionsAndroid} from 'react-native';
+import {PermissionsAndroid} from 'react-native';
 import ImageCropPicker from 'react-native-image-crop-picker';
 
 export const requestCameraPermissions = async (): Promise<void> => {
   try {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.CAMERA,
-      {
-        title: 'Camera Permission',
-        message: 'App needs access to your camera so you can take pictures.',
-        buttonNeutral: 'Ask Me Later',
-        buttonNegative: 'Cancel',
-        buttonPositive: 'OK',
-      },
-    );
+    // const granted =
+    await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA, {
+      title: 'Camera Permission',
+      message: 'App needs access to your camera so you can take pictures.',
+      buttonNeutral: 'Ask Me Later',
+      buttonNegative: 'Cancel',
+      buttonPositive: 'OK',
+    });
     // const {NEVER_ASK_AGAIN, DENIED} = PermissionsAndroid.RESULTS;
 
     // if (granted === NEVER_ASK_AGAIN) {
