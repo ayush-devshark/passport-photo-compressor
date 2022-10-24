@@ -179,8 +179,10 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
         title="Are you sure ?"
         visible={showConfirmModal}
         message="Are you sure because this action will discard all your changes ?"
-        onCancelPress={hideConfirmModal}
-        onDiscardPress={handleMoveToBackScreen}
+        primaryBtnTitle="Cancel"
+        dangerBtnTitle="Discard"
+        onPrimaryBtnPress={hideConfirmModal}
+        onDangerBtnPress={handleMoveToBackScreen}
       />
     </View>
   );

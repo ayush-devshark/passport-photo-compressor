@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import LargeIconButton from '../components/LargeIconButton';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -8,21 +8,32 @@ import {
 } from '../utils/imageSelector';
 import {NavigationProp} from '@react-navigation/native';
 import {RootStackParamList} from '../navigation/AppNavigator';
+import {checkCameraPermission} from '../utils/helper';
+import ConfirmModal from '../components/ConfirmModal';
 
 interface Props {
   navigation: NavigationProp<RootStackParamList>;
 }
 
 const Home: FC<Props> = ({navigation}): JSX.Element => {
+  const [showPermissionInfoAlert, setShowPermissionInfoAlert] =
+    useState<boolean>(false);
+
   const navigateToImageEditor = (uri: string): void => {
     navigation.navigate('ImageEditor', {imageUri: uri});
   };
 
   const handleImageCapture = async (): Promise<void> => {
     const {path, error} = await selectAndCropImageFromCamera();
+    let isGranted: boolean = false;
     if (error) {
-      return console.log(error);
+      isGranted = await checkCameraPermission();
     }
+
+    if (!isGranted) {
+      return setShowPermissionInfoAlert(true);
+    }
+
     navigateToImageEditor(path);
   };
 
@@ -65,6 +76,14 @@ const Home: FC<Props> = ({navigation}): JSX.Element => {
       <LargeIconButton title="Select" onPress={handleImageSelection}>
         <Icon name="folder-open" />
       </LargeIconButton>
+
+      <ConfirmModal
+        visible={showPermissionInfoAlert}
+        primaryBtnTitle="Open Settings"
+        dangerBtnTitle="Close"
+        title="Required Camera Permission"
+        message="For capturing image camera permission are required."
+      />
     </View>
   );
 };

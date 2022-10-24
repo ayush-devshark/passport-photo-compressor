@@ -13,20 +13,20 @@ export const requestCameraPermissions = async (): Promise<void> => {
         buttonPositive: 'OK',
       },
     );
-    const {NEVER_ASK_AGAIN, DENIED} = PermissionsAndroid.RESULTS;
+    // const {NEVER_ASK_AGAIN, DENIED} = PermissionsAndroid.RESULTS;
 
-    if (granted === NEVER_ASK_AGAIN) {
-      return Alert.alert(
-        'Fail to open camera',
-        'Its looks like camera permissions are not granted. Please allow access for proper use of app!',
-      );
-    }
-    if (granted === DENIED) {
-      return Alert.alert(
-        'Fail to open camera',
-        'Sorry to use this feature, camera permissions are required.',
-      );
-    }
+    // if (granted === NEVER_ASK_AGAIN) {
+    //   return Alert.alert(
+    //     'Fail to open camera',
+    //     'Its looks like camera permissions are not granted. Please allow access for proper use of app!',
+    //   );
+    // }
+    // if (granted === DENIED) {
+    //   return Alert.alert(
+    //     'Fail to open camera',
+    //     'Sorry to use this feature, camera permissions are required.',
+    //   );
+    // }
   } catch (err) {
     console.log('Fail to open camera error!', err);
   }
