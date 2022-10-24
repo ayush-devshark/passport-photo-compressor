@@ -56,8 +56,6 @@ export const selectAndCropImageFromDevice = async (
   height: number = 531,
 ): Promise<{path: string; error: unknown | null}> => {
   try {
-    await requestCameraPermissions();
-
     // open the gallery
     const {path} = await ImageCropPicker.openPicker({
       width,
