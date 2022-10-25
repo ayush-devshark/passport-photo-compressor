@@ -1,5 +1,5 @@
 import React, {FC, useState} from 'react';
-import {Linking, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import LargeIconButton from '../components/LargeIconButton';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {
@@ -9,7 +9,7 @@ import {
 import {NavigationProp} from '@react-navigation/native';
 import {RootStackParamList} from '../navigation/AppNavigator';
 import {checkCameraPermission} from '../utils/helper';
-import ConfirmModal from '../components/ConfirmModal';
+import PermissionWarning from '../components/PermissionWarning';
 
 interface Props {
   navigation: NavigationProp<RootStackParamList>;
@@ -46,10 +46,12 @@ const Home: FC<Props> = ({navigation}): JSX.Element => {
     navigateToImageEditor(path);
   };
 
-  const handleOpenSettings = (): void => {
-    setShowPermissionInfoAlert(false);
-    Linking.openSettings();
-  };
+  <PermissionWarning
+    message="For capturing image camera permission are required."
+    title="Required Camera Permission"
+    visible={showPermissionInfoAlert}
+    onClose={() => setShowPermissionInfoAlert(false)}
+  />;
 
   //  Example native module access
   /* const handleOnPress = async (): Promise<void> => {
@@ -82,16 +84,6 @@ const Home: FC<Props> = ({navigation}): JSX.Element => {
       <LargeIconButton title="Select" onPress={handleImageSelection}>
         <Icon name="folder-open" />
       </LargeIconButton>
-
-      <ConfirmModal
-        visible={showPermissionInfoAlert}
-        primaryBtnTitle="Open Settings"
-        dangerBtnTitle="Close"
-        title="Required Camera Permission"
-        message="For capturing image camera permission are required."
-        onDangerBtnPress={() => setShowPermissionInfoAlert(false)}
-        onPrimaryBtnPress={handleOpenSettings}
-      />
     </View>
   );
 };

@@ -8,10 +8,11 @@ import DoneLottie from '../components/DoneLottie';
 import EditorTools from '../components/EditorTools';
 import ImageEditorHeader from '../components/ImageEditorHeader';
 import LoadingAnimation from '../components/LoadingAnimation';
+import PermissionWarning from '../components/PermissionWarning';
 import SelectedImage from '../components/SelectedImage';
 import fsModule from '../modules/fsModule';
 import {RootStackParamList} from '../navigation/AppNavigator';
-import {covertSizeInKb} from '../utils/helper';
+import {covertSizeInKb, takeReadAndWritePermissions} from '../utils/helper';
 import {
   selectAndCropImageFromCamera,
   selectAndCropImageFromDevice,
@@ -30,6 +31,8 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
   const [loadingImage, setLoadingImage] = useState<boolean>(false);
   const [isImageSaved, setIsImageSaved] = useState<boolean>(false);
+  const [showPermissionWarning, setShowPermissionWarning] =
+    useState<boolean>(false);
   const [fileSize, setFileSize] = useState<number>(0);
   const [compressValue, setCompressValue] = useState<number>(1);
   const [compressedPercentage, setCompressedPercentage] = useState<number>(100);
@@ -109,6 +112,10 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
 
   const handleImageSave = async (): Promise<void> => {
     try {
+      const isGranted = await takeReadAndWritePermissions();
+      if (!isGranted) {
+        return setShowPermissionWarning(true);
+      }
       const name = 'pp-' + Date.now();
       const calcCompressValue: number = Math.floor(compressValue * 100);
       const uri = compressedImage.split('file:///')[1];
@@ -149,7 +156,6 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
     <View style={styles.container}>
       <ImageEditorHeader onSavePress={handleImageSave} />
       <BackgroundImageEditor />
-
       <View style={styles.imageContainer}>
         <SelectedImage uri={compressedImage || selectedImage}>
           {loadingImage ||
@@ -164,7 +170,6 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
             ))}
         </SelectedImage>
       </View>
-
       <EditorTools
         fileSize={fileSize}
         compressValue={compressValue}
@@ -174,7 +179,6 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
         onSliderChange={handleImageCompress}
         onSlidingComplete={updateCompressValue}
       />
-
       <ConfirmModal
         title="Are you sure ?"
         visible={showConfirmModal}
@@ -183,6 +187,12 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
         dangerBtnTitle="Discard"
         onPrimaryBtnPress={hideConfirmModal}
         onDangerBtnPress={handleMoveToBackScreen}
+      />
+      <PermissionWarning
+        message="For saving image, file and media permissions are required."
+        title="Required File and Media Permissions"
+        visible={showPermissionWarning}
+        onClose={() => setShowPermissionWarning(false)}
       />
     </View>
   );
