@@ -158,16 +158,15 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
       <BackgroundImageEditor />
       <View style={styles.imageContainer}>
         <SelectedImage uri={compressedImage || selectedImage}>
-          {loadingImage ||
-            (isImageSaved && (
-              <>
-                <LoadingAnimation visible={loadingImage} />
-                <DoneLottie
-                  visible={isImageSaved}
-                  onFinish={() => setIsImageSaved(false)}
-                />
-              </>
-            ))}
+          {(loadingImage || isImageSaved) && (
+            <>
+              <LoadingAnimation visible={loadingImage} />
+              <DoneLottie
+                visible={isImageSaved}
+                onFinish={() => setIsImageSaved(false)}
+              />
+            </>
+          )}
         </SelectedImage>
       </View>
       <EditorTools
